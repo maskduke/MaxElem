@@ -1,0 +1,22 @@
+package maxelem;
+
+import java.io.IOException;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class MaxElemReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+	
+	@Override
+	protected void reduce(Text key, Iterable<IntWritable> values, Context output)
+			throws IOException, InterruptedException {
+		int max = Integer.MIN_VALUE;
+		for (IntWritable i : values) {
+			if (max < i.get()) {
+				max = i.get();
+			}
+		}
+		output.write(key, new IntWritable(max));
+	}
+
+}
