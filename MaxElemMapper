@@ -1,0 +1,27 @@
+package maxelem;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+import java.io.IOException;
+
+public class MaxElemMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+	// private Text word = new Text();
+	private IntWritable num = new IntWritable();
+	IntWritable one = new IntWritable(1);
+	
+	@Override
+	protected void map(LongWritable key, Text value, Context output) throws IOException, InterruptedException {
+		String[] split = value.toString().split(" ");
+		for (String s : split) {
+			try {
+				num.set(Integer.parseInt(s));
+				output.write(new Text(""), num);
+			} catch (NumberFormatException e) {
+				// cannot parse - ignore
+			}
+		}
+	}
+}
